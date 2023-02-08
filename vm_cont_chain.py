@@ -11,6 +11,15 @@ a connection acknowledgement packet response from the server. """
 def on_connect(client, userdata, flags, rc):
     print("Connected to server (i.e., broker) with result code "+str(rc))
 
+    client.subscribe("bshara/ping")
+    client.message_callback_add("bshara/ping", on_message_from_ping)
+
+def on_message_from_ping(client, userdata, message):
+    print("Custom callback - Ping Message: " + message.payload.decode())
+    client.publish("bshara/pong", int(message.payload.decode())+1)
+    print("Publishing pong")
+    time.sleep(1)
+
 
 if __name__ == '__main__':
     #get IP address
@@ -32,29 +41,8 @@ if __name__ == '__main__':
     client. If the connection request is successful, the callback attached to
     `client.on_connect` will be called."""
 
-    client.connect(host="eclipse.usc.edu", port=11000, keepalive=60)
+    client.connect(host="172.20.10.3", port=1883, keepalive=60)
 
     """ask paho-mqtt to spawn a separate thread to handle
     incoming and outgoing mqtt messages."""
-    client.loop_start()
-    time.sleep(1)
-
-    while True:
-        #replace user with your USC username in all subscriptions
-        client.publish("bshara/ipinfo", f"{ip_address}")
-        print("Publishing ip address")
-        time.sleep(4)
-
-        #get date and time 
-        """your code here"""
-        now = datetime.now()
-        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-        #publish date and time in their own topics
-        
-        client.publish("bshara/dateandtime", f"{dt_string}")
-        print("Publishing date and time")
-        time.sleep(4)
-'''
-        client.publish("bshara/hi", "dt_string")
-        print("Default")
-        time.sleep(4)'''
+    client.loop_forever()
