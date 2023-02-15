@@ -14,6 +14,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("bshara/ping")
     client.message_callback_add("bshara/ping", on_message_from_ping)
 
+# publishing to pong
 def on_message_from_ping(client, userdata, message):
     print("Custom callback - Ping Message: " + message.payload.decode())
     client.publish("bshara/pong", int(message.payload.decode())+1)

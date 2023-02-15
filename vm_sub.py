@@ -15,12 +15,13 @@ def on_connect(client, userdata, flags, rc):
     print("Connected to server (i.e., broker) with result code "+str(rc))
     #replace user with your USC username in all subscriptions
     client.subscribe("bshara/ipinfo")
-    client.subscribe("bshara/dateandtime")
+    client.subscribe("bshara/date")
+    client.subscribe("bshara/time")
     
     #Add the custom callbacks by indicating the topic and the name of the callback handle
     client.message_callback_add("bshara/ipinfo", on_message_from_ipinfo)
-    client.message_callback_add("bshara/dateandtime", on_message_from_date_and_time)
-
+    client.message_callback_add("bshara/date", on_message_from_date)
+    client.message_callback_add("bshara/time", on_message)
 """This object (functions are objects!) serves as the default callback for 
 messages received when another node publishes a message this client is 
 subscribed to. By "default,"" we mean that this callback is called if a custom 
@@ -32,8 +33,8 @@ def on_message(client, userdata, msg):
 def on_message_from_ipinfo(client, userdata, message):
    print("Custom callback  - IP Message: "+message.payload.decode())
 
-def on_message_from_date_and_time(client, userdata, message):
-    print("Custom callback - Date and Time: " + message.payload.decode())
+def on_message_from_date(client, userdata, message):
+    print("Custom callback - Date: " + message.payload.decode())
 
 
 

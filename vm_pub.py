@@ -51,10 +51,12 @@ if __name__ == '__main__':
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
         #publish date and time in their own topics
         
-        client.publish("bshara/dateandtime", f"{dt_string}")
-        print("Publishing date and time")
+        client.publish("bshara/date", f"{dt_string}")
+        print("Publishing date")
         time.sleep(4)
-'''
-        client.publish("bshara/hi", "dt_string")
-        print("Default")
-        time.sleep(4)'''
+
+        now = datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+        client.publish("bshara/time", f"{current_time}")
+        print("Publishing time")
+        time.sleep(4)
